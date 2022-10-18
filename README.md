@@ -6,4 +6,5 @@ ils regroupent les données exploitées
 
 # Shiny
 ui + server = app Shiny 
+
 link app : https://amasbahi.shinyapps.io/AnimeRecommandation/
