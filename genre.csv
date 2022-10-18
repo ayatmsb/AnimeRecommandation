@@ -1,0 +1,83 @@
+nom_genre;id_genre
+ Adventure;1
+ Cars;2
+ Comedy;3
+ Dementia;4
+ Demons;5
+ Drama;6
+ Ecchi;7
+ Fantasy;8
+ Game;9
+ Harem;10
+ Hentai;11
+ Historical;12
+ Horror;13
+ Josei;14
+ Kids;15
+ Magic;16
+ Martial Arts;17
+ Mecha;18
+ Military;19
+ Music;20
+ Mystery;21
+ Parody;22
+ Police;23
+ Psychological;24
+ Romance;25
+ Samurai;26
+ School;27
+ Sci-Fi;28
+ Seinen;29
+ Shoujo;30
+ Shoujo Ai;31
+ Shounen;32
+ Shounen Ai;33
+ Slice of Life;34
+ Space;35
+ Sports;36
+ Super Power;37
+ Supernatural;38
+ Thriller;39
+ Vampire;40
+ Yaoi;41
+ Yuri;42
+Action;43
+Adventure;44
+Cars;45
+Comedy;46
+Dementia;47
+Demons;48
+Drama;49
+Ecchi;50
+Fantasy;51
+Game;52
+Harem;53
+Hentai;54
+Historical;55
+Horror;56
+Josei;57
+Kids;58
+Magic;59
+Martial Arts;60
+Mecha;61
+Military;62
+Music;63
+Mystery;64
+Parody;65
+Police;66
+Psychological;67
+Romance;68
+Samurai;69
+School;70
+Sci-Fi;71
+Seinen;72
+Shoujo;73
+Shounen;74
+Slice of Life;75
+Space;76
+Sports;77
+Super Power;78
+Supernatural;79
+Thriller;80
+Vampire;81
+Yaoi;82
