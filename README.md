@@ -5,6 +5,7 @@ Regroupe le projet RShiny fait en cours sur une bdd anime
 ils regroupent les données exploitées
 
 # Shiny
-ui + server = app Shiny 
+ui + server = app Shiny (anciennes versions)
+nouvelle version (app.R)
 
-link app : https://amasbahi.shinyapps.io/AnimeRecommandation/
+link app : https://amasbahi.shinyapps.io/AnimeRecommandations/
