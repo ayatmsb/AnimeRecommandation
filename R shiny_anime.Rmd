@@ -1,0 +1,289 @@
+---
+
+---
+title: "Étude statistique sur les animés"
+output: html_document
+author: "Farah Naji<br>
+Ayat Masbahi"
+date: "19-10-2022"
+---
+
+<center>![](/cloud/project/anime2.png)</center>
+
+
+```{r setup, include=FALSE, warning = FALSE}
+knitr::opts_chunk$set(echo = T)
+```
+
+
+
+## R Markdown
+
+---
+title: "Etude statistique sur les animés"
+output:
+  word_documen5t: default
+  html_document:
+    theme: readable
+    highlight: haddock
+date: '18/10/2022'
+---
+
+
+
+## Présentation du jeu de données
+Nous avons choisi un jeu de données représentant des animés.On retrouve dans ce jeu de données les animés, leur genre, type, nombre d'épisodes, la note donnée à l'animé et le nombre de personnes de la communauté de chaque animé.   
+
+
+Ce jeu de données est issu de Kaggle, une plateforme web appartenant à Google.
+
+Le jeu de données originale est constitué de 12 294 lignes et de 7 colonnes.
+Les attributs des colonnes de la base de données originale étaient : 
+
+<strong>
+- anime_id <br>
+- nom <br>
+- genre <br>
+- type <br>
+- episodes <br>
+- note <br>
+- members <br>
+
+</strong>
+Après avoir analysé les données, nous avons supprimé la colonne nombre d'épisodes qui nous était inutile pour notre projet. Nous avons par la suite nettoyé la base de données en supprimant les lignes vides.
+
+Ensuite, nous avons créé deux table, une table genre et une table type.
+
+- La table genre contients les attributs : *nom_genre* et *id_genre*
+- La table type contient les attributs : *nom_type* et *id_type*<br/>
+
+Ces tables seront liées à notre base de données afin d'avoir une base de données complète.<br/>
+
+Les attributs des colonnes de notre base de données finale sont :
+
+- **id_anime**: Identifiant de l'animé
+- **nom_anime**: Nom complet de l'animé
+- **note_anime**: Note donnée à l'animé sur 10
+- **membres_animes**: Le nombre de personnes qui appartiennent à la communauté de cet animé.<br/>
+- **nom_genre**: Le genre de l'animé
+- **nom_type**: Le type de l'animé ( film, OVA, Spécial, TV, ONA, Musique)
+- **id_genre**: L'identifiant du genre de l'animé
+- **id_type**: L'identifiant du type de l'animé.
+
+Notre problématique pour le projet est : 
+
+- **Quelles sont les caractéristiques d'un animé qui plait au publique ?**
+
+
+
+## Graphiques répondant à la problématique
+
+
+```{r,echo = FALSE, warning = FALSE,message=FALSE}
+
+
+library(esquisse)
+library(shinydashboard)
+library(ggplot2)
+library(dplyr)
+library(DT)
+```
+
+
+<center>
+```{r,echo= FALSE,warning=FALSE}
+
+couleur <- c( noir = "#412a1e", 
+              jaune = "#f8de3c",
+              rouge = "#c8472c",
+              blanc = "#fefefe",
+              bleu_c = "#58acf4",
+              bleu_d = "#105edd",
+              bleu_f = "#0b3075")
+anime = read.csv2("anime.csv", h=T, sep=";")
+type = read.csv2("type.csv", h=T, sep=";")
+genre = read.csv2("genre.csv", h=T, sep=";")
+anime<- merge(x = anime, y = genre, by = "id_genre", all.x = TRUE)
+anime<- merge(x = anime, y = type, by = "id_type", all.y = TRUE)
+top_3_graph <-  anime %>%  #TOP 3 DES ANIMES LES MIEUX NOTES
+  filter(note_anime >= 9.2 & note_anime <= 9.4) %>%
+  ggplot() +
+  aes(x = nom_anime, y = note_anime) +
+  geom_col(fill = couleur["rouge"]) +
+  labs(
+    x = "Titre animé",
+    y = "Note animé",
+    title = "Top 3 animés"
+  ) +
+  coord_flip() +
+  theme_classic() +
+  theme(
+    plot.title = element_text(size = 16L,
+                              face = "bold",
+                              hjust = 0.5),
+    axis.title.y = element_text(face = "bold"),
+    axis.title.x = element_text(face = "bold")
+  )
+top_3_graph
+
+```
+</center>
+
+
+Ce graphique permet de voir le top 3 des animés les mieux notés.
+L'animé le mieux noté est Kimi no Na wa vient par la suite la série Fullmétal Alchimemist avec une note de 9.26/10 et enfin l'animé Gintama avec 9.25/10 comme note.<br/>
+
+Pour la réalisation de ce graphique on a utilisé la fonction ggplot du package "ggplot2".
+
+<center>
+```{r,echo=FALSE,warning=FALSE}
+couleur <- c( noir = "#412a1e", 
+              jaune = "#f8de3c",
+              rouge = "#c8472c",
+              blanc = "#fefefe",
+              bleu_c = "#58acf4",
+              bleu_d = "#105edd",
+              bleu_f = "#0b3075")
+x <- prop.table(table(anime$nom_type))
+lb <- round(100*x/sum(x), 1)
+
+pie(x, labels = lb , main = "Repartition des genres sur le nombre total d'animées",col = couleur)
+legend("topright", c("Movie", "Music", "ONA", "OVA", "Special", "TV"), cex = 0.8,
+       fill = couleur)
+```
+</center>
+
+
+Ce graphique est un graphique en secteurs qui représente la répartition des types sur le nombre total d'animés. On y trouve six types en tous:
+
+- les films
+- les musiques
+- les ONA (original net animation): un terme qui désigne les animés diffusés directement sur Internet en streaming, au lieu de moyens plus classiques comme la télévision ou le cinéma. <br/>
+- les OVA (original vidéo animation): un terme utilisé pour désigner les productions d'animation japonaises destinées à l'exploitation commerciale directe physique ou numérique.<br/>
+- le type spécial: épisodes d'animés hors-série.
+- les TV: les animés diffuseés à la télévision.
+
+On peut donc voir que le type TV est le plus représenté, il représente 35.9%.<br/>
+Les types films et OVA viennent après avec un pourcentage de 19.3%.
+Le type spécial représente lui 15.6%
+
+Les types les moins representés sont les musiques et les ONA.
+Pour réaliser ce graphique, nous avons utilisé la fonctionnalité pie de R.<br/>
+Les étiquettes de données sont représenter en pourcentage.<br/>
+
+Pour les couleurs nous avons choisi une palette de couleurs de one piece.
+
+<center>
+```{r,echo=FALSE,warning=FALSE}
+
+graph_genre <- anime %>% #TOP DES GENRES LES MIEUX NOTES SIMILAIRE AU PRECEDENT (PERTINENT ?)
+  filter(note_anime >= 7.45 & note_anime <= 9.4) %>%
+  filter(nom_genre %in% c("Action", "Comedy",
+                          "Adventure", "Drama")) %>%
+  ggplot() +
+  aes(x = nom_genre, y = note_anime) +
+  geom_col(fill = couleur["bleu_f"]) +
+  labs(
+    x = "Genre",
+    y = "Cumule des notes",
+    title = "Les genres les mieux notés"
+  ) +
+  theme_classic() +
+  theme(
+    plot.title = element_text(size = 16L,
+                              face = "bold",
+                              hjust = 0.5),
+    axis.title.y = element_text(face = "bold"),
+    axis.title.x = element_text(face = "bold")
+  )
+graph_genre
+```
+</center>
+
+Ce graphique permet de nous montrer les genres les mieux notés.<br/>
+
+Le genre le mieux noté est le genre action, vient par la suite le genre comédie et drama et enfin le genre aventure .<br/>
+
+Pour faire ce graphique, la principale fonction utilisée est le ggplot.
+
+
+## Tableaux et tri à plat
+
+Ce tri à plat nous permet de savoir le nombre de chaque types représentés dans notre base de données.<br/>
+TV est le type le plus présent avec un nombre de 3117 animés suivi du type film avec 1680 animés et OVA avec 1673 animés.
+
+Par la suite on retrouve le type spécial avec 1356 animés et le type ONA avec un nombre de 464 animés. Enfin le type musique est le moins représenté, en effet on retrouve 396 animés de ce type dans notre base de données. 
+
+```{r,echo=FALSE,warning=FALSE}
+nb_type<- table(anime$nom_type)
+nb_type
+```
+Ce tableau nous permet de voir un croisement entre les genres et les types d'animés présents dans la base de données, le type TV et le genre comédie sont le plus représentés avec 1036 animés, suivi du croisement du genre action et du type TV avec un nombre de 985 animés.<br/>
+
+On a réalisé ce croisement de données avec la fonction table.
+
+
+<center>
+```{r,echo=FALSE,warning=FALSE}
+anime = read.csv2("anime.csv", h=T, sep=";")
+type = read.csv2("type.csv", h=T, sep=";")
+genre = read.csv2("genre.csv", h=T, sep=";")
+anime<- merge(x = anime, y = genre, by = "id_genre", all.x = TRUE)
+anime<- merge(x = anime, y = type, by = "id_type", all.y = TRUE)
+nb_type<- table(anime$nom_type, anime$nom_genre)
+nb_type
+```
+</center>
+
+Ce tableau nous affiche par cinq les éléments d'animées selon un tri d'une colonne, en effet l'utilisateur peut trier l'ordre du tableau en cliquant sur la flèche à coté du nom de la colonne.<br/> On peut trier en ordre croissant ou décroissant pour les variables quantitatives et par ordre alphabétique pour les variables qualitatives.<br/>
+
+Par exemple si on veut savoir les 5 animés les moins notés il suffit de cliquer sur la flèche de la colonne "note_anime" et cliquer une autre fois pour avoir les 5 animés les mieux notés.
+
+
+<center>
+
+
+```{r,echo=FALSE,warning=FALSE}
+anime = read.csv2("anime.csv", h=T, sep=";")
+type = read.csv2("type.csv", h=T, sep=";")
+genre = read.csv2("genre.csv", h=T, sep=";")
+anime<- merge(x = anime, y = genre, by = "id_genre", all.x = TRUE)
+anime<- merge(x = anime, y = type, by = "id_type", all.y = TRUE)
+
+library(DT)
+anime %>% 
+  datatable(options = list(
+    pageLength = 5)) 
+```
+</center>
+
+
+
+## Réponse de la problématique
+
+Pour répondre à notre problématique, les caractéristiques des animés qui plaisent au publique sont ceux de type film et TV dont le genre est drama, action et comedie.<br/>
+
+Le nom de l'animé le mieux noté est Kimi no Na wa connu sous le nom de 'your name' avec une note de 9.37/10, ce dernier est un animé drama de type film.
+Fullmetal alchimist est le second animé le mieux noté avec une note de 9.26/10, son type est TV est son genre est action.
+
+<center>![](/cloud/project/images.jfif)</center>
+
+
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
